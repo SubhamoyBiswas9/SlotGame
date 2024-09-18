@@ -11,7 +11,7 @@ public class SlotManager : MonoBehaviour
 
     int slotCount;
 
-    public static event Action OnSpinEvent;
+    public static event Action<int> OnSpinEvent;
 
     [SerializeField] TMP_Text resultText;
 
@@ -38,7 +38,9 @@ public class SlotManager : MonoBehaviour
         if (finalSprites.Count > 0)
             finalSprites.Clear();
 
-        OnSpinEvent?.Invoke();
+        int randVal = UnityEngine.Random.Range(0, 2);
+        OnSpinEvent?.Invoke(randVal);
+        Debug.Log(randVal);
         spinBtn.interactable = false;
     }
 

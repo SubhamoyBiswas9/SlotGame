@@ -11,6 +11,10 @@ public class Slot : MonoBehaviour
 
     public static event System.Action<Sprite> OnComplete;
 
+    int randVal;
+
+    Sprite originalSprite;
+
     private void OnEnable()
     {
         SlotManager.OnSpinEvent += SlotManager_OnSpinEvent;
@@ -21,9 +25,13 @@ public class Slot : MonoBehaviour
         SlotManager.OnSpinEvent -= SlotManager_OnSpinEvent;
     }
 
-    private void SlotManager_OnSpinEvent()
+    private void SlotManager_OnSpinEvent(int randVal)
     {
+        if (originalSprite != null)
+            middleItem.sprite = originalSprite;
+
         StartCoroutine(Rotate());
+        this.randVal = randVal;
     }
 
     IEnumerator Rotate()
@@ -40,8 +48,12 @@ public class Slot : MonoBehaviour
             yield return new WaitForSeconds(timeInterval);
         }
 
-        if (Random.Range(0, 2) != 0)
+        if (randVal != 0)
+        {
+            originalSprite = middleItem.sprite;
             middleItem.sprite = sprites[Random.Range(0, sprites.Length)];
+        }
+            
 
         OnComplete?.Invoke(middleItem.sprite);
     }
